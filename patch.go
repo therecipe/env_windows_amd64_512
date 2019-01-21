@@ -74,9 +74,9 @@ func main() {
 	oPath = strings.Split(oPath, "=")[1]
 	data = bytes.Replace(data, []byte("cd /D "+oPath+"\r\n"), []byte(""), -1)
 	data = bytes.Replace(data, []byte(oPath), []byte(pPath), -1)
-	data = bytes.Replace(data, []byte(strings.Replace(strings.Replace(strings.Replace(oPath, "\\", "/", -1), "/5.12.0/", "/Tools/", -1), "73", "730", -1)), []byte(strings.Replace(strings.Replace(strings.Replace(pPath, "\\", "/", -1), "/5.12.0/", "/Tools/", -1), "73", "730", -1)), -1)
+	data = bytes.Replace(data, []byte(strings.Replace(strings.Replace(strings.Replace(oPath, "\\", "/", -1), "/5.12.0/", "/Tools/", -1), "73", "730", -1)), []byte(strings.Replace(strings.Replace(strings.Replace(strings.Replace(pPath, "\\", "/", -1), "/5.12.0/", "/Tools/", -1), "73", "730", -1), "_amd64/Tools/", "_amd64_Tools/", -1)), -1)
 	if !bytes.Contains(data, []byte("-----")) {
-		data = append(data, []byte("set CGO_LDFLAGS="+filepath.Join(pPath, "..", "..", "Tools", "mingw730_64", "x86_64-w64-mingw32", "lib", "libmsvcrt.a")+"\r\n")...) //this can be omitted when using newer versions of gcc
+		data = append(data, []byte("set CGO_LDFLAGS="+strings.Replace(filepath.Join(pPath, "..", "..", "Tools", "mingw730_64", "x86_64-w64-mingw32", "lib", "libmsvcrt.a"), "_amd64\\Tools\\", "_amd64_Tools\\", -1)+"\r\n")...) //this can be omitted when using newer versions of gcc
 		data = append(data, []byte("echo To export the current PATH to your default CMD or PS env run\r\necho ------------------------\r\necho setx PATH \"%%PATH%%\"\r\necho ------------------------\r\necho and re-open the command line window\r\n")...)
 	}
 	if err := ioutil.WriteFile(fn, data, 0644); err != nil {
